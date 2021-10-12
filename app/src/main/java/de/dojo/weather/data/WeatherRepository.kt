@@ -6,7 +6,8 @@ import java.util.Date
 object WeatherRepository {
     val currentWeather = Weather(
         date = getDate(0),
-        place = "gxc headquarter",
+        place = "gcx headquarter",
+        country = "Germany",
         weatherType = WeatherType.PARTLY_SUNNY,
         temperature = 24,
         windSpeed = 2.2f,
@@ -17,49 +18,49 @@ object WeatherRepository {
     val forecast = listOf(
         WeatherForecast(
             date = getDate(0),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.SUNNY,
             highestTemperature = 32,
             lowestTemperature = 31
         ),
         WeatherForecast(
             date = getDate(1),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.RAINY,
             highestTemperature = 22,
             lowestTemperature = 23
         ),
         WeatherForecast(
             date = getDate(2),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.SUNNY,
             highestTemperature = 30,
             lowestTemperature = 31
         ),
         WeatherForecast(
             date = getDate(3),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.CLOUDY,
             highestTemperature = 24,
             lowestTemperature = 26
         ),
         WeatherForecast(
             date = getDate(4),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.PARTLY_SUNNY,
             highestTemperature = 26,
             lowestTemperature = 27
         ),
         WeatherForecast(
             date = getDate(5),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.PARTLY_SUNNY,
             highestTemperature = 27,
             lowestTemperature = 28
         ),
         WeatherForecast(
             date = getDate(6),
-            place = "gxc headquarter",
+            place = "gcx headquarter",
             weatherType = WeatherType.RAINY,
             highestTemperature = 22,
             lowestTemperature = 23
@@ -70,6 +71,7 @@ object WeatherRepository {
 data class Weather(
     val date: Date,
     val place: String,
+    val country: String,
     val weatherType: WeatherType,
     val temperature: Int,
     val windSpeed: Float,
