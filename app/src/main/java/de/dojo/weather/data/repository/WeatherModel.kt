@@ -7,11 +7,6 @@ data class Forecast(
     val weatherData: List<Weather>
 )
 
-data class WeatherStation(
-    val stationId: String,
-    val stationName: String
-)
-
 data class Weather(
     val date: Date,
     val condition: String,

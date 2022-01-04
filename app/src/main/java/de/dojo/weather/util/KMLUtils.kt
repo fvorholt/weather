@@ -24,7 +24,6 @@ fun parseKML(document: Document): Forecast {
     )
 }
 
-
 fun Document.getDates(): List<Date> {
     val listOfDates = mutableListOf<Date>()
     val dates = getElementsByTagName(KMLConsts.TimestampKey)
