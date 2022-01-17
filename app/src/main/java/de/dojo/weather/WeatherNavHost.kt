@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import de.dojo.weather.ui.SettingsScreen.SettingsScreen
+import de.dojo.weather.ui.WeatherDetailScreen.WeatherDetailScreen
 import de.dojo.weather.ui.WeatherScreen.WeatherScreen
 
 @Composable
@@ -12,6 +14,11 @@ fun WeatherNavHost(
     startDestination: String = "weather"
 ) {
     NavHost(navController, startDestination) {
-        composable("weather") { WeatherScreen(currentLocation = "headquarter", onSettingsClick = { /*TODO*/ }) }
+        composable("weather") { WeatherScreen(currentLocation = "headquarter", onSettingsClick = {
+            navController.navigate("setting")
+        }) }
+        composable("setting") { SettingsScreen(onApplySettings = {}) }
+        composable("weather_detail") { WeatherDetailScreen("headquarter") }
+
     }
 }
