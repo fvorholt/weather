@@ -1,4 +1,4 @@
-package de.dojo.weather
+package de.dojo.weather.ui.composables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.Image
@@ -6,57 +6,50 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import de.dojo.weather.data.WeatherForecast
-import de.dojo.weather.data.WeatherRepository.forecast
-import de.dojo.weather.data.WeatherType.CLOUDY
-import de.dojo.weather.data.WeatherType.PARTLY_SUNNY
-import de.dojo.weather.data.WeatherType.RAINY
-import de.dojo.weather.data.WeatherType.SUNNY
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import de.dojo.weather.data.WeatherRepository
+import de.dojo.weather.data.getImageResourceOnPrimary
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun WeatherListItem(
-    weatherForecast: WeatherForecast
+    weatherForecast: WeatherForecast,
+    modifier: Modifier = Modifier
 ) {
-    val weatherDrawable = when (weatherForecast.weatherType) {
-        SUNNY -> R.drawable.ic_sunny
-        PARTLY_SUNNY -> R.drawable.ic_partly_cloudy
-        CLOUDY -> R.drawable.ic_cloudy
-        RAINY -> R.drawable.ic_rainy
-    }
     Row(
-        modifier = Modifier.padding(all = 8.dp),
+        modifier = modifier.padding(all = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = weatherDrawable),
+            painter = painterResource(id = weatherForecast.weatherType.getImageResourceOnPrimary()),
+            modifier = Modifier.size(32.dp),
             contentDescription = null
         )
 
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(32.dp))
 
 
         Text(
-            text = "${getDayFromDate(weatherForecast.date)}, ",
+            text = "${getDateTimeFromDate(weatherForecast.dateTime)}, ",
             fontWeight = FontWeight.Bold,
+            color = Color.White
         )
 
         Text(
-            text = getDayAndMonthFromDate(weatherForecast.date),
-            fontWeight = FontWeight.Light,
-            fontSize = 11.sp,
+            text = getDayAndMonthFromDateTime(weatherForecast.dateTime),
+            color = Color.White.copy(alpha = 0.6f)
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -64,12 +57,12 @@ fun WeatherListItem(
         Text(
             text = "${weatherForecast.highestTemperature}",
             fontWeight = FontWeight.Bold,
+            color = Color.White
         )
 
         Text(
             text = "/${weatherForecast.lowestTemperature}°",
-            fontWeight = FontWeight.Light,
-            fontSize = 11.sp,
+            color = Color.White.copy(alpha = 0.6f)
         )
     }
 }
@@ -79,17 +72,18 @@ fun WeatherList(forecasts: List<WeatherForecast>) {
     Column {
         forecasts.forEach { forecast ->
             WeatherListItem(
-                weatherForecast = forecast
+                weatherForecast = forecast,
+                modifier = Modifier.padding(all = 16.dp)
             )
         }
     }
 }
 
-private fun getDayFromDate(date: Date): String =
-    SimpleDateFormat("EEEE", Locale.getDefault()).format(date)
+private fun getDateTimeFromDate(date: LocalDateTime): String =
+    DateTimeFormatter.ofPattern("EEEE").format(date)
 
-private fun getDayAndMonthFromDate(date: Date) =
-    SimpleDateFormat("dd MMM", Locale.getDefault()).format(date)
+private fun getDayAndMonthFromDateTime(date: LocalDateTime) =
+    DateTimeFormatter.ofPattern("dd MMM").format(date)
 
 @Preview(
     uiMode = UI_MODE_NIGHT_NO,
@@ -99,5 +93,5 @@ private fun getDayAndMonthFromDate(date: Date) =
 )
 @Composable
 fun MockWeatherListItem0() {
-    WeatherList(forecasts = forecast)
+    WeatherList(forecasts = WeatherRepository.getCurrentForecast("headquarter"))
 }
