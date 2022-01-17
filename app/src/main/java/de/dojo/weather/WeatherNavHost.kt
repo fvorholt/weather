@@ -10,15 +10,21 @@ import de.dojo.weather.ui.WeatherScreen.WeatherScreen
 
 @Composable
 fun WeatherNavHost(
-    navController: NavHostController,
-    startDestination: String = "weather"
+        navController: NavHostController,
+        startDestination: String = "weather"
 ) {
     NavHost(navController, startDestination) {
-        composable("weather") { WeatherScreen(currentLocation = "headquarter", onSettingsClick = {
-            navController.navigate("setting")
-        }) }
+        composable("weather") {
+            WeatherScreen(currentLocation = "headquarter",
+                    onSettingsClick = {
+                        navController.navigate("setting")
+                    }, onDetailClick = {
+                        navController.navigate("weather_detail")
+                    }
+            )
+        }
         composable("setting") { SettingsScreen(onApplySettings = {}) }
-        composable("weather_detail") { WeatherDetailScreen("headquarter") }
+        composable("weather_detail") { WeatherDetailScreen("headquarter") } //TODO: back navigation
 
     }
 }

@@ -26,6 +26,7 @@ import de.dojo.weather.ui.composables.WeatherTable
 fun WeatherScreen(
     currentLocation: String,
     onSettingsClick: () -> Unit,
+    onDetailClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val currentWeather = WeatherRepository.getCurrentWeather(currentLocation)
@@ -59,7 +60,8 @@ fun WeatherScreen(
         item {
             ForecastSlider(
                 forecast = currentWeather.todaysForecast,
-                modifier = Modifier.padding(top = 32.dp, start = 20.dp, end = 20.dp)
+                modifier = Modifier.padding(top = 32.dp, start = 20.dp, end = 20.dp),
+                onDetailClick = onDetailClick
             )
         }
     }

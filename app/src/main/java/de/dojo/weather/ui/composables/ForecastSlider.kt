@@ -32,7 +32,7 @@ import de.dojo.weather.data.getImageResourceOnSecondary
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ForecastSlider(forecast: List<HourlyForecast>, modifier: Modifier = Modifier) {
+fun ForecastSlider(forecast: List<HourlyForecast>, modifier: Modifier = Modifier, onDetailClick: () -> Unit) {
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -43,7 +43,8 @@ fun ForecastSlider(forecast: List<HourlyForecast>, modifier: Modifier = Modifier
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6,
             )
-            Row(modifier = Modifier.clickable { }, verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.clickable { onDetailClick()
+            }, verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Next 7 Days",
                     style = MaterialTheme.typography.h6,
