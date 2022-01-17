@@ -18,15 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import de.dojo.weather.data.Weather
+import de.dojo.weather.data.WeatherRepository
 import de.dojo.weather.ui.composables.ForecastSlider
 import de.dojo.weather.ui.composables.WeatherTable
 
 @Composable
 fun WeatherScreen(
-    currentWeather: Weather,
+    currentLocation: String,
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val currentWeather = WeatherRepository.getCurrentWeather(currentLocation)
+
     LazyColumn(
         modifier = modifier.statusBarsPadding()
     ) {

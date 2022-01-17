@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import de.dojo.weather.data.WeatherRepository
 import de.dojo.weather.ui.WeatherScreen.WeatherScreen
@@ -18,10 +19,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatherTheme {
                 ProvideWindowInsets {
-                    WeatherScreen(
-                        currentWeather = WeatherRepository.getCurrentWeather("headquarter"),
-                        onSettingsClick = {}
-                    )
+                    val navHostController = rememberNavController()
+                    WeatherNavHost(navController = navHostController)
+
 //                    WeatherDetailScreen("headquarter")
 //                    SettingsScreen(onApplySettings = {})
                 }
