@@ -22,7 +22,10 @@ import de.dojo.weather.data.WeatherRepository
 import de.dojo.weather.ui.composables.WeatherList
 
 @Composable
-fun WeatherDetailScreen(location: String) {
+fun WeatherDetailScreen(
+    location: String,
+    onBackClick: () -> Unit
+) {
 
     val forecasts = WeatherRepository.getCurrentForecast(location)
 
@@ -44,7 +47,7 @@ fun WeatherDetailScreen(location: String) {
                         color = Color.White
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         tint = Color.White,

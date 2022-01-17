@@ -21,9 +21,6 @@ class MainActivity : ComponentActivity() {
                 ProvideWindowInsets {
                     val navHostController = rememberNavController()
                     WeatherNavHost(navController = navHostController)
-
-//                    WeatherDetailScreen("headquarter")
-//                    SettingsScreen(onApplySettings = {})
                 }
             }
         }
