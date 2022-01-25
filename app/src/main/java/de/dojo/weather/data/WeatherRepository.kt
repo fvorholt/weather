@@ -1,71 +1,24 @@
 package de.dojo.weather.data
 
+import de.dojo.weather.R
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Date
 
 object WeatherRepository {
-    val currentWeather = Weather(
-        date = getDate(0),
-        place = "gcx headquarter",
-        country = "Germany",
-        weatherType = WeatherType.PARTLY_SUNNY,
-        temperature = 24,
-        windSpeed = 2.2f,
-        feelsLikeTemperature = 25,
-        indexUV = 2,
-        pressure = 1014
-    )
-    val forecast = listOf(
-        WeatherForecast(
-            date = getDate(0),
-            place = "gcx headquarter",
-            weatherType = WeatherType.SUNNY,
-            highestTemperature = 32,
-            lowestTemperature = 31
-        ),
-        WeatherForecast(
-            date = getDate(1),
-            place = "gcx headquarter",
-            weatherType = WeatherType.RAINY,
-            highestTemperature = 22,
-            lowestTemperature = 23
-        ),
-        WeatherForecast(
-            date = getDate(2),
-            place = "gcx headquarter",
-            weatherType = WeatherType.SUNNY,
-            highestTemperature = 30,
-            lowestTemperature = 31
-        ),
-        WeatherForecast(
-            date = getDate(3),
-            place = "gcx headquarter",
-            weatherType = WeatherType.CLOUDY,
-            highestTemperature = 24,
-            lowestTemperature = 26
-        ),
-        WeatherForecast(
-            date = getDate(4),
-            place = "gcx headquarter",
-            weatherType = WeatherType.PARTLY_SUNNY,
-            highestTemperature = 26,
-            lowestTemperature = 27
-        ),
-        WeatherForecast(
-            date = getDate(5),
-            place = "gcx headquarter",
-            weatherType = WeatherType.PARTLY_SUNNY,
-            highestTemperature = 27,
-            lowestTemperature = 28
-        ),
-        WeatherForecast(
-            date = getDate(6),
-            place = "gcx headquarter",
-            weatherType = WeatherType.RAINY,
-            highestTemperature = 22,
-            lowestTemperature = 23
-        ),
-    )
+    fun getCurrentWeather(location: String): Weather {
+        return when (location) {
+            "headquarter" -> headquarterWeather
+            else -> dortmundWeather
+        }
+    }
+
+    fun getCurrentForecast(location: String): List<WeatherForecast> {
+        return when (location) {
+            "headquarter" -> headquarterForecast
+            else -> dortmundForecast
+        }
+    }
 }
 
 data class Weather(
@@ -77,15 +30,22 @@ data class Weather(
     val windSpeed: Float,
     val feelsLikeTemperature: Int,
     val indexUV: Int,
-    val pressure: Int
+    val pressure: Int,
+    val todaysForecast: List<HourlyForecast>
 )
 
 data class WeatherForecast(
-    val date: Date,
+    val dateTime: LocalDateTime,
     val place: String,
     val weatherType: WeatherType,
     val highestTemperature: Int,
     val lowestTemperature: Int
+)
+
+data class HourlyForecast(
+    val dateTime: LocalDateTime,
+    val weatherType: WeatherType,
+    val temperature: Int
 )
 
 enum class WeatherType {
@@ -96,4 +56,32 @@ fun getDate(days: Int): Date {
     return Calendar.getInstance().apply {
         add(Calendar.DATE, days)
     }.time
+}
+
+fun WeatherType.getDisplayName(): String {
+    return when (this) {
+        WeatherType.SUNNY -> "Sunny"
+        WeatherType.PARTLY_SUNNY -> "Partly sunny"
+        WeatherType.CLOUDY -> "Cloudy"
+        WeatherType.RAINY -> "Rainy"
+    }
+}
+
+fun WeatherType.getImageResourceOnPrimary(): Int {
+    return when (this) {
+        WeatherType.SUNNY -> R.drawable.ic_sunny_on_primary
+        WeatherType.PARTLY_SUNNY -> R.drawable.ic_partly_cloudy_on_primary
+        WeatherType.CLOUDY -> R.drawable.ic_cloudy_on_primary
+        WeatherType.RAINY -> R.drawable.ic_rainy_on_primary
+    }
+}
+
+
+fun WeatherType.getImageResourceOnSecondary(): Int {
+    return when (this) {
+        WeatherType.SUNNY -> R.drawable.ic_sunny_on_secondary
+        WeatherType.PARTLY_SUNNY -> R.drawable.ic_partly_cloudy_on_secondary
+        WeatherType.CLOUDY -> R.drawable.ic_cloudy_on_secondary
+        WeatherType.RAINY -> R.drawable.ic_rainy_on_secondary
+    }
 }

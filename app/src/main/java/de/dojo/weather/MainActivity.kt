@@ -7,8 +7,12 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import de.dojo.weather.composables.HomeScreen
+import de.dojo.weather.data.WeatherRepository
+import de.dojo.weather.ui.WeatherScreen.WeatherScreen
 import de.dojo.weather.ui.home.HomeViewModel
 import de.dojo.weather.ui.theme.WeatherTheme
 
@@ -19,14 +23,24 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             WeatherTheme {
-                // A surface container using the 'background' color from the theme
-                Scaffold {
-                    HomeScreen(
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(it)
+                ProvideWindowInsets {
+                    WeatherScreen(
+                        currentWeather = WeatherRepository.getCurrentWeather("headquarter"),
+                        onSettingsClick = {}
                     )
+//                    WeatherDetailScreen("headquarter")
+//                    SettingsScreen(onApplySettings = {})
+                    // A surface container using the 'background' color from the theme
+                    Scaffold {
+                        HomeScreen(
+                            viewModel = viewModel,
+                            modifier = Modifier.padding(it)
+                        )
+                    }
                 }
             }
         }
