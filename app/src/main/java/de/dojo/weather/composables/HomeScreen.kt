@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import de.dojo.weather.data.repository.Forecast
 import de.dojo.weather.data.repository.Result
 import de.dojo.weather.data.repository.Weather
@@ -27,7 +28,9 @@ import de.dojo.weather.ui.home.HomeViewModel
 import java.text.SimpleDateFormat
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier) {
+    val viewModel = hiltViewModel<HomeViewModel>()
+
     val forecastModel: State<Result<Forecast>> =
         viewModel.weatherData.collectAsState(initial = Result.Loading())
 
