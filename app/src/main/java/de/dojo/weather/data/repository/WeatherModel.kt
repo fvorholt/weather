@@ -1,6 +1,6 @@
 package de.dojo.weather.data.repository
 
-import java.util.Date
+import java.time.LocalDateTime
 
 data class Forecast(
     val station: WeatherStation,
@@ -8,7 +8,7 @@ data class Forecast(
 )
 
 data class Weather(
-    val date: Date,
+    val date: LocalDateTime,
     val condition: String,
     val temperature: Float, // Unit: K
     val dewPoint: Float, // Unit: K
@@ -26,3 +26,11 @@ data class Weather(
     val fogProbability: Float, // Unit: % (0..100)
     val humidity: Float, // Unit: %
 )
+
+fun Weather.temperatureCelsius(): Float {
+    return temperature - 273.15f
+}
+
+fun Weather.pressureMBar(): Float {
+    return pressure * 0.01f
+}

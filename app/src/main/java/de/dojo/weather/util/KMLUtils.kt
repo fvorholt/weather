@@ -1,15 +1,9 @@
 package de.dojo.weather.util
 
-import de.dojo.weather.data.repository.Forecast
-import de.dojo.weather.data.repository.KMLConsts
-import de.dojo.weather.data.repository.Weather
-import de.dojo.weather.data.repository.WeatherCondition
-import de.dojo.weather.data.repository.WeatherData
-import de.dojo.weather.data.repository.WeatherStation
+import de.dojo.weather.data.repository.*
 import org.w3c.dom.Document
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun parseKML(document: Document): Forecast {
     val listOfDates = document.getDates()
@@ -24,15 +18,16 @@ fun parseKML(document: Document): Forecast {
     )
 }
 
-fun Document.getDates(): List<Date> {
-    val listOfDates = mutableListOf<Date>()
+fun Document.getDates(): List<LocalDateTime> {
+    val listOfDates = mutableListOf<LocalDateTime>()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     val dates = getElementsByTagName(KMLConsts.TimestampKey)
     for (x in 0 until dates.length) {
         val content = dates.item(x).textContent
         if (content != null) {
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-                .parse(content)
-                ?.let { listOfDates.add(it) }
+            LocalDateTime.parse(content, formatter)?.let {
+                listOfDates.add(it)
+            }
         }
     }
     return listOfDates
@@ -65,7 +60,7 @@ fun Document.getForecastValues(): Map<String, List<String>> {
 }
 
 fun getWeatherData(
-    listOfDates: List<Date>,
+    listOfDates: List<LocalDateTime>,
     forecastValues: Map<String, List<String>>
 ): List<Weather> {
     val weatherData = mutableListOf<Weather>()

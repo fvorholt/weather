@@ -2,14 +2,7 @@ package de.dojo.weather.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -23,11 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.dojo.weather.R
-import de.dojo.weather.data.Weather
-import de.dojo.weather.data.getDisplayName
-import de.dojo.weather.data.getImageResourceOnPrimary
-import java.text.SimpleDateFormat
-import java.util.Locale
+import de.dojo.weather.data.repository.Weather
+import de.dojo.weather.data.repository.pressureMBar
+import de.dojo.weather.data.repository.temperatureCelsius
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun WeatherTable(weather: Weather, modifier: Modifier = Modifier) {
@@ -39,26 +31,28 @@ fun WeatherTable(weather: Weather, modifier: Modifier = Modifier) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = weather.weatherType.getImageResourceOnPrimary()),
+                painter = painterResource(id = R.drawable.ic_sunny_on_primary),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .size(64.dp)
             )
             Text(
-                text = weather.weatherType.getDisplayName(),
+                text = weather.condition,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6,
                 color = Color.White,
                 modifier = Modifier.padding(8.dp)
             )
+
+            val dateFormatter = DateTimeFormatter.ofPattern("EE, dd MMM HH:MM")
             Text(
-                text = SimpleDateFormat("EE, dd MMM", Locale.getDefault()).format(weather.date),
+                text = weather.date.format(dateFormatter),
                 style = MaterialTheme.typography.caption,
                 color = Color.White
             )
             Text(
-                text = "${weather.temperature}°",
+                text = "${weather.temperatureCelsius().toInt()}°",
                 style = MaterialTheme.typography.h1,
                 color = Color.White,
                 modifier = Modifier.padding(24.dp)
@@ -90,7 +84,7 @@ fun WeatherDateTable(currentWeather: Weather) {
             WeatherTableItem(
                 iconId = R.drawable.ic_thermostat,
                 title = "FEELS LIKE",
-                value = "${currentWeather.feelsLikeTemperature}°",
+                value = "${currentWeather.temperatureCelsius().toInt()}°",
                 modifier = Modifier
                     .weight(1f)
                     .height(80.dp)
@@ -101,7 +95,7 @@ fun WeatherDateTable(currentWeather: Weather) {
             WeatherTableItem(
                 iconId = R.drawable.ic_sun,
                 title = "INDEX UV",
-                value = currentWeather.indexUV.toString(),
+                value = "${currentWeather.precipitation} kg/m2",
                 modifier = Modifier
                     .weight(1f)
                     .height(80.dp)
@@ -115,7 +109,7 @@ fun WeatherDateTable(currentWeather: Weather) {
             WeatherTableItem(
                 iconId = R.drawable.ic_pressure,
                 title = "PRESSURE",
-                value = "${currentWeather.pressure} mbar",
+                value = "${currentWeather.pressureMBar()} mbar",
                 modifier = Modifier
                     .weight(1f)
                     .height(80.dp)

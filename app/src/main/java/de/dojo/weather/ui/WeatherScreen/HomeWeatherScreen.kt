@@ -12,23 +12,50 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
-import de.dojo.weather.data.Weather
+import androidx.hilt.navigation.compose.hiltViewModel
+import de.dojo.weather.data.repository.Forecast
+import de.dojo.weather.data.repository.Result
+import de.dojo.weather.data.repository.displayName
 import de.dojo.weather.ui.composables.ForecastSlider
 import de.dojo.weather.ui.composables.WeatherTable
+import de.dojo.weather.util.isCurrentHour
+import de.dojo.weather.util.isLaterCurrentDay
 
 @Composable
-fun WeatherScreen(
-    currentWeather: Weather,
+fun HomeWeatherScreen(
     onSettingsClick: () -> Unit,
+    onWeatherDetailClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val viewModel = hiltViewModel<HomeWeatherViewModel>()
+    val currentWeather = viewModel.currentWeather.collectAsState()
+
+    when (val current = currentWeather.value) {
+        is Result.Success -> HomeWeatherSuccessView(
+            forecast = current.data,
+            onSettingsClick = onSettingsClick,
+            onWeatherDetailClick = onWeatherDetailClick,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+fun HomeWeatherSuccessView(
+    forecast: Forecast,
+    onSettingsClick: () -> Unit,
+    onWeatherDetailClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val currentWeather = forecast.weatherData.first { it.date.isCurrentHour() }
+
     LazyColumn(
-        modifier = modifier.statusBarsPadding()
+        modifier = modifier
     ) {
         item {
             Row(
@@ -37,7 +64,7 @@ fun WeatherScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = currentWeather.place,
+                    text = forecast.station.displayName(),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(20.dp)
@@ -55,7 +82,8 @@ fun WeatherScreen(
         }
         item {
             ForecastSlider(
-                forecast = currentWeather.todaysForecast,
+                forecast = forecast.weatherData.filter { it.date.isLaterCurrentDay() },
+                onWeatherDetailClick = onWeatherDetailClick,
                 modifier = Modifier.padding(top = 32.dp, start = 20.dp, end = 20.dp)
             )
         }

@@ -13369,3 +13369,11 @@ data class WeatherStation(
     val stationName: String,
     val region: String? = null
 )
+
+fun WeatherStation.displayName(): String {
+    var displayName = stationName
+    if (region?.isNotEmpty() == true) {
+        displayName = "$displayName, $region"
+    }
+    return displayName
+}

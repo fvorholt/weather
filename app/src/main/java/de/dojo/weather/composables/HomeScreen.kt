@@ -1,23 +1,12 @@
 package de.dojo.weather.composables
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,7 +14,7 @@ import de.dojo.weather.data.repository.Forecast
 import de.dojo.weather.data.repository.Result
 import de.dojo.weather.data.repository.Weather
 import de.dojo.weather.ui.home.HomeViewModel
-import java.text.SimpleDateFormat
+import de.dojo.weather.util.readableTimestamp
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -109,8 +98,7 @@ fun ForecastList(forecast: Forecast) {
                 ) {
                     Column(modifier = Modifier.padding(8.dp)) {
                         Text(
-                            SimpleDateFormat.getDateTimeInstance()
-                                .format(forecast.weatherData[it].date)
+                            text = forecast.weatherData[it].date.readableTimestamp()
                         )
                         val tempK = forecast.weatherData[it].temperature
                         Text(text = "${(tempK - 272.15).toInt()} °C")
