@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import de.dojo.weather.ui.SettingsScreen.SettingsScreen
-import de.dojo.weather.ui.WeatherDetailScreen.WeatherDetailScreen
-import de.dojo.weather.ui.WeatherScreen.HomeWeatherScreen
+import de.dojo.weather.ui.screens.settings.SettingsScreen
+import de.dojo.weather.ui.screens.detail.WeatherDetailScreen
+import de.dojo.weather.ui.screens.home.HomeWeatherScreen
 
 @Composable
 fun AppNavigation() {

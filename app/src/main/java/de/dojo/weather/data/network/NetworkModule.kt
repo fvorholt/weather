@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.dojo.weather.data.repository.DWDRepository
-import de.dojo.weather.data.repository.StationRepository
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.logging.*
@@ -41,11 +40,5 @@ object NetworkModule {
     @Singleton
     fun provideDWDRepository(dwdBackend: DWDBackend): DWDRepository {
         return DWDRepository(dwdBackend = dwdBackend)
-    }
-
-    @Provides
-    @Singleton
-    fun provideStationRepository(): StationRepository {
-        return StationRepository
     }
 }

@@ -1,4 +1,4 @@
-package de.dojo.weather.ui.WeatherDetailScreen
+package de.dojo.weather.ui.screens.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

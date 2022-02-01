@@ -1,4 +1,4 @@
-package de.dojo.weather.ui.WeatherScreen
+package de.dojo.weather.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import de.dojo.weather.data.repository.Forecast
 import de.dojo.weather.data.repository.Result
-import de.dojo.weather.data.repository.displayName
 import de.dojo.weather.ui.composables.ForecastSlider
 import de.dojo.weather.ui.composables.WeatherTable
 import de.dojo.weather.util.isCurrentHour
@@ -64,12 +63,15 @@ fun HomeWeatherSuccessView(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = forecast.station.displayName(),
+                    text = "fabian", // todo
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(20.dp)
                 )
-                IconButton(onClick = onSettingsClick) {
+                IconButton(
+                    onClick = onSettingsClick,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
                     Icon(imageVector = Icons.Default.Menu, contentDescription = null)
                 }
             }

@@ -1,9 +1,11 @@
-package de.dojo.weather.ui.WeatherScreen
+package de.dojo.weather.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.dojo.weather.data.repository.*
+import de.dojo.weather.data.repository.DWDRepository
+import de.dojo.weather.data.repository.Forecast
+import de.dojo.weather.data.repository.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -14,8 +16,7 @@ const val currentStation = "10156"
 
 @HiltViewModel
 class HomeWeatherViewModel @Inject constructor(
-    val repository: DWDRepository,
-    val stationRepository: StationRepository
+    val repository: DWDRepository
 ) : ViewModel() {
 
     var currentWeather: MutableStateFlow<Result<Forecast>> = MutableStateFlow(Result.Loading())

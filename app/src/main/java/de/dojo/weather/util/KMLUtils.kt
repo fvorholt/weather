@@ -13,7 +13,6 @@ fun parseKML(document: Document): Forecast {
     val weatherData = getWeatherData(listOfDates, forecastValues)
 
     return Forecast(
-        station = WeatherStation(stationId, stationName),
         weatherData = weatherData
     )
 }

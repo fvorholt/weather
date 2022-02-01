@@ -3,7 +3,6 @@ package de.dojo.weather.data.repository
 import java.time.LocalDateTime
 
 data class Forecast(
-    val station: WeatherStation,
     val weatherData: List<Weather>
 )
 
