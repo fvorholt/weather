@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Station(
     @PrimaryKey val id: String,
     val name: String,
-    val region: String?
+    val region: String?,
+    val saved: Boolean
 )

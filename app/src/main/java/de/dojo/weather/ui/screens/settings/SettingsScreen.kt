@@ -1,5 +1,6 @@
 package de.dojo.weather.ui.screens.settings
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -36,8 +37,7 @@ fun SettingsScreen(
 ) {
     val viewModel = hiltViewModel<SettingsViewModel>()
 
-    val savedStations = viewModel.savedStations
-    val searchedStations = viewModel.searchedStations.collectAsState()
+    val stations = viewModel.stations.collectAsState(initial = listOf())
 
     var addStationText by remember { mutableStateOf("") }
 
@@ -72,11 +72,14 @@ fun SettingsScreen(
                 addStationText = it
                 viewModel.findStations(it)
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp )
         )
         StationList(
-            savedStations = savedStations,
-            searchedStations = searchedStations.value,
+            stations = stations.value,
+            onStationClick = viewModel::stationSelected,
+            onRemoveStationClick = viewModel::removeStation,
             modifier = Modifier.weight(1f)
         )
     }
@@ -85,40 +88,22 @@ fun SettingsScreen(
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 fun StationList(
-    savedStations: List<Station>,
-    searchedStations: List<Station>,
+    stations: List<Station>,
+    onStationClick: (String) -> Unit,
+    onRemoveStationClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Log.d("Fabian", "Compose stations: $stations")
+
     LazyColumn(
         modifier = modifier.nestedScroll(connection = rememberImeNestedScrollConnection())
     ) {
-        item {
-            Text(
-                text = "SAVED",
-                style = MaterialTheme.typography.caption,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 8.dp)
+        items(stations) {
+            StationRow(
+                station = it,
+                onStationClick = onStationClick,
+                onRemoveStationClick = onRemoveStationClick
             )
-        }
-
-        items(savedStations) {
-            StationRow(station = it, onStationClick = { /*TODO*/ })
-        }
-
-        if (searchedStations.isNotEmpty()) {
-
-            item {
-                Text(
-                    text = "NEW",
-                    style = MaterialTheme.typography.caption,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(top = 12.dp)
-                )
-            }
-
-            items(searchedStations) {
-                StationRow(station = it, onStationClick = { /*TODO*/ })
-            }
         }
     }
 }
@@ -126,17 +111,19 @@ fun StationList(
 @Composable
 fun StationRow(
     station: Station,
-    onStationClick: () -> Unit,
+    onStationClick: (String) -> Unit,
+    onRemoveStationClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clickable { onStationClick() }
+            .clickable { onStationClick(station.id) }
             .padding(vertical = 8.dp)
+            .padding(start = 8.dp)
             .fillMaxWidth()
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = station.name
             )
@@ -147,6 +134,14 @@ fun StationRow(
                 fontSize = 12.sp
             )
         }
-
+        if (station.saved) {
+            IconButton(
+                onClick = { onRemoveStationClick(station.id) }
+            ) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = null)
+            }
+        }
     }
 }
+
+
