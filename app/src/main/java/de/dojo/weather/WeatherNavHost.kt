@@ -28,7 +28,10 @@ fun WeatherNavHost(
             )
         }
         composable(WeatherDestination.SETTINGS.name) {
-            SettingsScreen(onApplySettings = { chosenLocation -> location = chosenLocation })
+            SettingsScreen(onApplySettings = { chosenLocation ->
+                location = chosenLocation
+                navController.navigateUp()
+            })
         }
         composable(WeatherDestination.WEATHER_DETAIL.name) {
             WeatherDetailScreen(
