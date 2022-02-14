@@ -1,6 +1,6 @@
 package de.dojo.weather
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,11 +11,15 @@ import de.dojo.weather.ui.WeatherScreen.WeatherScreen
 @Composable
 fun WeatherNavHost(
     navController: NavHostController,
-    startDestination: String = WeatherDestination.WEATHER.name
+    startDestination: String = WeatherDestination.WEATHER.name,
 ) {
+    var location: String by remember {
+        mutableStateOf("headquarter")
+    }
+
     NavHost(navController, startDestination) {
         composable(WeatherDestination.WEATHER.name) {
-            WeatherScreen(currentLocation = "headquarter",
+            WeatherScreen(currentLocation = location,
                 onSettingsClick = {
                     navController.navigate(WeatherDestination.SETTINGS.name)
                 }, onDetailClick = {
@@ -23,7 +27,9 @@ fun WeatherNavHost(
                 }
             )
         }
-        composable(WeatherDestination.SETTINGS.name) { SettingsScreen(onApplySettings = {}) }
+        composable(WeatherDestination.SETTINGS.name) {
+            SettingsScreen(onApplySettings = { chosenLocation -> location = chosenLocation })
+        }
         composable(WeatherDestination.WEATHER_DETAIL.name) {
             WeatherDetailScreen(
                 location = "headquarter",
