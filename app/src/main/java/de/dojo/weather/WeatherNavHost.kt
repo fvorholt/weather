@@ -15,23 +15,30 @@ private const val locationArgumentPlaceholder = "location"
 fun WeatherNavHost(
     navController: NavHostController,
 ) {
-    var location: String by remember {
-        mutableStateOf("headquarter")
-    }
-    val startDestination: String = WeatherDestination.Weather(location = location).getLink()
+    var location: String by remember { mutableStateOf("headquarter") }
+
+    // Needs to be the template like url without any argument. Argument has to be passed through the
+    // defaultValue in navArgument
+    val startDestination: String = WeatherDestination.Weather(location = location).getRoute()
 
     NavHost(navController, startDestination) {
         composable(
             route = WeatherDestination.Weather(location = location).getRoute(),
-            arguments = listOf(navArgument(locationArgumentPlaceholder) {})
+            arguments = listOf(
+                navArgument("location") { defaultValue = "headquarter" }
+            )
         ) {
             WeatherScreen(
                 currentLocation = location,
                 onSettingsClick = {
-                    navController.navigate(WeatherDestination.Settings(location = location).getLink())
+                    navController.navigate(
+                        WeatherDestination.Settings(location = location).getLink()
+                    )
                 },
                 onDetailClick = {
-                    navController.navigate(WeatherDestination.Weather(location = location).getLink())
+                    navController.navigate(
+                        WeatherDestination.WeatherDetail(location = location).getLink()
+                    )
                 }
             )
         }
@@ -45,7 +52,7 @@ fun WeatherNavHost(
         }
         composable(WeatherDestination.WeatherDetail(location = location).getLink()) {
             WeatherDetailScreen(
-                location = "headquarter",
+                location = location,
                 onBackClick = { navController.navigateUp() }
             )
         }
@@ -63,11 +70,11 @@ private sealed class WeatherDestination(
     fun getLink(): String = "$destination?location=$location"
 
     data class Weather(override val location: String) :
-        WeatherDestination(destination = "WEATHER", location = location)
+        WeatherDestination(destination = "weather", location = location)
 
     data class WeatherDetail(override val location: String) :
-        WeatherDestination(destination = "WEATHER_DETAIL", location = location)
+        WeatherDestination(destination = "weather_detail", location = location)
 
     data class Settings(override val location: String) :
-        WeatherDestination(destination = "SETTINGS", location = location)
+        WeatherDestination(destination = "settings", location = location)
 }
